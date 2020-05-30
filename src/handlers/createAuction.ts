@@ -14,7 +14,7 @@ export const createAuction: APIGatewayProxyHandler = async (event, context) => {
   const auction: Auction = new Auction(title, defaultStatus, now);
 
   const params = {
-    TableName: 'AuctionsTable',
+    TableName: process.env.AUCTIONS_TABLE_NAME,
     Item: auction,
   };
 
