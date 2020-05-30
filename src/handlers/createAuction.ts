@@ -18,7 +18,7 @@ export const createAuction: APIGatewayProxyHandler = async (event, context) => {
     Item: auction,
   };
 
-  // default put uses callbacks, chain promise method to use async await
+  // default put uses callbacks, chain on the promise method to use async await
   await dynamoDb.put(params).promise();
 
   return {
