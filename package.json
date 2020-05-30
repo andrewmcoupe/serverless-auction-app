@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.686.0",
+    "serverless-pseudo-parameters": "^2.5.0",
     "source-map-support": "^0.5.10",
     "uuid": "^8.1.0"
   },
