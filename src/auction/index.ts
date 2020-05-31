@@ -11,14 +11,9 @@ export class Auction {
   status: AuctionStatus
   createdAt: string
 
-  constructor(title: string, status: AuctionStatus, createdAt: string) {
+  constructor() {
     this.id = uuid()
-    this.title = title
-    this.status = status
-    this.createdAt = createdAt
-  }
-
-  updateStatus(status: AuctionStatus): void {
-    this.status = status
+    this.status = AuctionStatus.OPEN
+    this.createdAt = new Date().toISOString()
   }
 }
