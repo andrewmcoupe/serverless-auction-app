@@ -14,7 +14,6 @@ const auction = new Auction()
 const handler: APIGatewayProxyHandler = async (event, context) => {
   const { title } = JSON.parse(event.body)
 
-  // const auction: Auction = new Auction(title, defaultStatus, now)
   auction.title = title
 
   const params = {
