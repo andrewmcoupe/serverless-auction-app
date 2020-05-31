@@ -41,3 +41,10 @@ functions:
       - http:
           method: POST
           path: /auction
+
+  getAuctions:
+    handler: src/handlers/getAuctions.getAuctions
+    events:
+      - http:
+          method: GET
+          path: /auctions
