@@ -6,16 +6,16 @@ import httpEventNormalizer from '@middy/http-event-normalizer'
 import httpErrorHandler from '@middy/http-error-handler'
 import createError from 'http-errors'
 
-import { Auction, AuctionStatus } from '../auction'
+import { Auction } from '../auction'
 
 const dynamoDb = new DynamoDB.DocumentClient()
+const auction = new Auction()
 
 const handler: APIGatewayProxyHandler = async (event, context) => {
   const { title } = JSON.parse(event.body)
-  const now = new Date().toISOString()
-  const defaultStatus = AuctionStatus.OPEN
 
-  const auction: Auction = new Auction(title, defaultStatus, now)
+  // const auction: Auction = new Auction(title, defaultStatus, now)
+  auction.title = title
 
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,
