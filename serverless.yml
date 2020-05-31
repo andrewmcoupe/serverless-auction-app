@@ -8,6 +8,9 @@ custom:
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
+    forceExclude:
+      - aws-sdk
+      - '@types/aws-lambda'
 
 plugins:
   - serverless-webpack

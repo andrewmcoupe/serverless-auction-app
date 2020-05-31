@@ -1,12 +1,16 @@
 import { APIGatewayProxyHandler } from 'aws-lambda'
-import 'source-map-support/register'
 import { DynamoDB } from 'aws-sdk'
+import 'source-map-support/register'
+import middy from '@middy/core'
+import httpEventNormalizer from '@middy/http-event-normalizer'
+import httpErrorHandler from '@middy/http-error-handler'
+import createError from 'http-errors'
 
 import { Auction, AuctionStatus } from '../auction'
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
-export const createAuction: APIGatewayProxyHandler = async (event, context) => {
+const handler: APIGatewayProxyHandler = async (event, context) => {
   const { title } = JSON.parse(event.body)
   const now = new Date().toISOString()
   const defaultStatus = AuctionStatus.OPEN
@@ -18,11 +22,17 @@ export const createAuction: APIGatewayProxyHandler = async (event, context) => {
     Item: auction,
   }
 
-  // default put uses callbacks, chain on the promise method to use async await
-  await dynamoDb.put(params).promise()
+  try {
+    await dynamoDb.put(params).promise()
+  } catch (error) {
+    console.error(error)
+    throw new createError.InternalServerError(error)
+  }
 
   return {
     statusCode: 201,
     body: JSON.stringify(auction),
   }
 }
+
+export const createAuction = middy(handler).use(httpEventNormalizer()).use(httpErrorHandler())

@@ -10,13 +10,18 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@middy/core": "^1.0.0",
+    "@middy/http-error-handler": "^1.0.0",
+    "@middy/http-event-normalizer": "^1.0.0",
+    "@middy/http-json-body-parser": "^1.0.0",
+    "@types/aws-lambda": "^8.10.51",
     "aws-sdk": "^2.686.0",
+    "http-errors": "^1.7.3",
     "serverless-pseudo-parameters": "^2.5.0",
     "source-map-support": "^0.5.10",
     "uuid": "^8.1.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.17",
     "@types/node": "^10.12.18",
     "fork-ts-checker-webpack-plugin": "^3.0.1",
     "husky": "^4.2.5",
