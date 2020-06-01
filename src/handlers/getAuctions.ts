@@ -6,8 +6,8 @@ import createError from 'http-errors'
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
-const handler: APIGatewayProxyHandler = async (event, context) => {
-  let auctions
+const getAuctions: APIGatewayProxyHandler = async (event, context) => {
+  let auctions: DynamoDB.DocumentClient.ItemList
 
   try {
     const result = await dynamoDb
@@ -28,4 +28,4 @@ const handler: APIGatewayProxyHandler = async (event, context) => {
   }
 }
 
-export const getAuctions = middy(handler)
+export const handler = middy(getAuctions)

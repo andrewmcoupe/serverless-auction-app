@@ -11,7 +11,7 @@ import { Auction } from '../auction'
 const dynamoDb = new DynamoDB.DocumentClient()
 const auction = new Auction()
 
-const handler: APIGatewayProxyHandler = async (event, context) => {
+const createAuction: APIGatewayProxyHandler = async (event, context) => {
   const { title } = JSON.parse(event.body)
 
   auction.title = title
@@ -34,4 +34,4 @@ const handler: APIGatewayProxyHandler = async (event, context) => {
   }
 }
 
-export const createAuction = middy(handler).use(httpEventNormalizer()).use(httpErrorHandler())
+export const handler = middy(createAuction).use(httpEventNormalizer()).use(httpErrorHandler())
