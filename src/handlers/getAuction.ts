@@ -1,9 +1,7 @@
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import { DynamoDB } from 'aws-sdk'
-import 'source-map-support/register'
-import middy from '@middy/core'
+import commonMiddleware from '../lib/commonMiddleware'
 import createError from 'http-errors'
-import httpErrorHandler from '@middy/http-error-handler'
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
@@ -33,4 +31,4 @@ const getAuction: APIGatewayProxyHandler = async (event, context) => {
   }
 }
 
-export const handler = middy(getAuction).use(httpErrorHandler())
+export const handler = commonMiddleware(getAuction)
