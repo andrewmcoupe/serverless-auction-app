@@ -3,11 +3,12 @@ import { DynamoDB } from 'aws-sdk'
 import 'source-map-support/register'
 import middy from '@middy/core'
 import createError from 'http-errors'
+import httpErrorHandler from '@middy/http-error-handler'
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
 const getAuction: APIGatewayProxyHandler = async (event, context) => {
-  let auction: DynamoDB.DocumentClient.GetItemOutput
+  let auction: DynamoDB.DocumentClient.GetItemOutput | null
   const { id } = event.pathParameters
 
   try {
@@ -16,7 +17,6 @@ const getAuction: APIGatewayProxyHandler = async (event, context) => {
       Key: { id },
     }
     const result = await dynamoDb.get(params).promise()
-
     auction = result.Item
   } catch (error) {
     console.error(error)
@@ -33,4 +33,4 @@ const getAuction: APIGatewayProxyHandler = async (event, context) => {
   }
 }
 
-export const handler = middy(getAuction)
+export const handler = middy(getAuction).use(httpErrorHandler())
