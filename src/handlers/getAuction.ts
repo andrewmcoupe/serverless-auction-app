@@ -2,12 +2,12 @@ import { APIGatewayProxyHandler } from 'aws-lambda'
 import { DynamoDB } from 'aws-sdk'
 import commonMiddleware from '../lib/commonMiddleware'
 import createError from 'http-errors'
+import { Auction } from '../auction'
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
-const getAuction: APIGatewayProxyHandler = async (event, context) => {
-  let auction: DynamoDB.DocumentClient.GetItemOutput | null
-  const { id } = event.pathParameters
+export async function getAuctionById(id: string): Promise<Auction> {
+  let auction: Auction | null
 
   try {
     const params = {
@@ -15,7 +15,7 @@ const getAuction: APIGatewayProxyHandler = async (event, context) => {
       Key: { id },
     }
     const result = await dynamoDb.get(params).promise()
-    auction = result.Item
+    auction = result.Item as Auction
   } catch (error) {
     console.error(error)
     throw new createError.InternalServerError(error)
@@ -24,6 +24,13 @@ const getAuction: APIGatewayProxyHandler = async (event, context) => {
   if (!auction) {
     throw new createError.NotFound(`Auction with id ${id} not found`)
   }
+
+  return auction
+}
+
+const getAuction: APIGatewayProxyHandler = async (event, context) => {
+  const { id } = event.pathParameters
+  const auction = await getAuctionById(id)
 
   return {
     statusCode: 200,
