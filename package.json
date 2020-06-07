@@ -26,6 +26,7 @@
     "uuid": "^8.1.0"
   },
   "devDependencies": {
+    "@cinch-labs/eslint-config": "^3.0.2",
     "@cinch-labs/prettier-config": "^1.0.1",
     "@types/jest": "^25.2.3",
     "@types/node": "^10.12.18",
