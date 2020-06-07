@@ -4,6 +4,7 @@ import createError from 'http-errors'
 
 import commonMiddleware from '../lib/commonMiddleware'
 import { getAuctionById } from './getAuction'
+import { AuctionStatus } from '../auction'
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
@@ -11,6 +12,10 @@ const placeBid: APIGatewayProxyHandler = async (event, context) => {
   const { id } = event.pathParameters
   const { amount } = JSON.parse(event.body)
   const auction = await getAuctionById(id)
+
+  if (auction.status !== AuctionStatus.OPEN) {
+    throw new createError.Forbidden('You cannot bid on closed auctions')
+  }
 
   if (amount < auction.highestBid.amount) {
     throw new createError.Forbidden(
