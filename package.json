@@ -6,9 +6,12 @@
   "author": "Andy Coupe",
   "license": "MIT",
   "scripts": {
-    "prettier:fix": "prettier \"**/*.ts\" --check --write",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prettier:check": "prettier \"./**/*\" --check",
+    "prettier:fix": "prettier \"**/*.ts\" --check --write",
+    "lint": "eslint 'handlers/**/*.{js,ts,tsx}'",
+    "tsc:repo": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@middy/core": "^1.0.0",
@@ -23,8 +26,10 @@
     "uuid": "^8.1.0"
   },
   "devDependencies": {
+    "@cinch-labs/prettier-config": "^1.0.1",
     "@types/jest": "^25.2.3",
     "@types/node": "^10.12.18",
+    "eslint": "^7.2.0",
     "fork-ts-checker-webpack-plugin": "^3.0.1",
     "husky": "^4.2.5",
     "jest": "^26.0.1",
