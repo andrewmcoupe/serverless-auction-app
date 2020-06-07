@@ -10,7 +10,7 @@
     "test:watch": "jest --watch",
     "prettier:check": "prettier \"./**/*\" --check",
     "prettier:fix": "prettier \"**/*.ts\" --check --write",
-    "lint": "eslint 'handlers/**/*.{js,ts,tsx}'",
+    "lint": "eslint '**/*.{js,ts}'",
     "tsc:repo": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
