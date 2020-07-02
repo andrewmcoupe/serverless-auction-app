@@ -17,7 +17,7 @@ const getAuctions: APIGatewayProxyHandler = async (event, context) => {
   }
 
   const params: DynamoDB.DocumentClient.QueryInput = {
-    TableName: process.env.AUCTIONS_TABLE_NAME,
+    TableName: process.env.AUCTIONS_TABLE_NAME as string,
     IndexName: 'statusAndEndingAt',
     KeyConditionExpression: '#status = :status',
     ExpressionAttributeValues: {

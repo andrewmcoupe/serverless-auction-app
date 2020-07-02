@@ -1,14 +1,19 @@
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import { DynamoDB } from 'aws-sdk'
 import createError from 'http-errors'
-
+import validator from '@middy/validator'
 import commonMiddleware from '../lib/commonMiddleware'
 import { getAuctionById } from './getAuction'
 import { AuctionStatus } from '../auction'
+import placeBidSchema from '../lib/schemas/placeBidSchema'
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
 const placeBid: APIGatewayProxyHandler = async (event, context) => {
+  if (!event.body || !event.pathParameters) {
+    throw new createError.BadRequest('Please provide event body and path parameters')
+  }
+
   const { id } = event.pathParameters
   const { amount } = JSON.parse(event.body)
   const auction = await getAuctionById(id)
@@ -24,7 +29,7 @@ const placeBid: APIGatewayProxyHandler = async (event, context) => {
   }
 
   const params = {
-    TableName: process.env.AUCTIONS_TABLE_NAME,
+    TableName: process.env.AUCTIONS_TABLE_NAME as string,
     Key: { id },
     UpdateExpression: 'set highestBid.amount = :amount',
     ExpressionAttributeValues: {
@@ -35,12 +40,12 @@ const placeBid: APIGatewayProxyHandler = async (event, context) => {
 
   let updatedAuction: DynamoDB.DocumentClient.AttributeMap
 
-  try {
-    const result = await dynamoDb.update(params).promise()
+  const result = await dynamoDb.update(params).promise()
+
+  if (result.Attributes) {
     updatedAuction = result.Attributes
-  } catch (error) {
-    console.error(error)
-    throw new createError.InternalServerError(error)
+  } else {
+    throw new createError.InternalServerError('Something went wrong updating the auction')
   }
 
   return {
@@ -49,4 +54,4 @@ const placeBid: APIGatewayProxyHandler = async (event, context) => {
   }
 }
 
-export const handler = commonMiddleware(placeBid)
+export const handler = commonMiddleware(placeBid).use(validator({ inputSchema: placeBidSchema }))

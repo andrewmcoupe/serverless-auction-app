@@ -41,11 +41,6 @@ functions:
       - http:
           method: POST
           path: /auction
-      - eventBridge:
-          eventBus: auctions
-          pattern:
-            source:
-              - createAuction
 
   getAuctions:
     handler: src/handlers/getAuctions.handler
